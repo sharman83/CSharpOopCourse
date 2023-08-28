@@ -10,8 +10,8 @@ namespace RangeTask
 
         public Range(double from, double to)
         {
-            this.From = from;
-            this.To = to;
+            From = from;
+            To = to;
         }
 
         public double GetLength()
@@ -19,10 +19,20 @@ namespace RangeTask
             return To - From;
         }
 
-        public Range GetIntersection(Range anotherRange)
+        public bool IsInside(double number)
         {
-            double intersectionFrom = Math.Max(From, anotherRange.From);
-            double intersectionTo = Math.Min(To, anotherRange.To);
+            return number >= From && number <= To;
+        }
+
+        public override string ToString()
+        {
+            return "(" + From + "; " + To + ")";
+        }
+
+        public Range GetIntersection(Range range)
+        {
+            double intersectionFrom = Math.Max(From, range.From);
+            double intersectionTo = Math.Min(To, range.To);
 
             if (intersectionFrom >= intersectionTo)
             {
@@ -32,42 +42,39 @@ namespace RangeTask
             return new Range(intersectionFrom, intersectionTo);
         }
 
-        public Range[] GetUnion(Range anotherRange)
+        public Range[] GetUnion(Range range)
         {
-            double unionFrom = Math.Min(From, anotherRange.From);
-            double unionTo = Math.Max(To, anotherRange.To);
-
-            if (anotherRange.From > To)
+            if (range.From > To)
             {
-                return new Range[] { new Range(From, To), new Range(anotherRange.From, anotherRange.To) };
+                return new Range[] { new Range(From, To), new Range(range.From, range.To) };
             }
 
-            if (anotherRange.To < From)
+            if (range.To < From)
             {
-                return new Range[] { new Range(anotherRange.From, anotherRange.To), new Range(From, To) };
+                return new Range[] { new Range(range.From, range.To), new Range(From, To) };
             }
 
-            return new Range[] { new Range(unionFrom, unionTo) };
+            return new Range[] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
         }
 
-        public Range[] GetDifference(Range anotherRange)
+        public Range[] GetDifference(Range range)
         {
-            if (From >= anotherRange.From && To <= anotherRange.To)
+            if (From >= range.From && To <= range.To)
             {
                 return new Range[0];
             }
 
-            if (From >= anotherRange.From && From <= anotherRange.To && To > anotherRange.To)
+            if (From >= range.From && From <= range.To && To > range.To)
             {
-                return new Range[] { new Range(anotherRange.To, To) };
+                return new Range[] { new Range(range.To, To) };
             }
 
-            if (To >= anotherRange.From && To <= anotherRange.To && From < anotherRange.From)
+            if (To >= range.From && To <= range.To && From < range.From)
             {
-                return new Range[] { new Range(From, anotherRange.From) };
+                return new Range[] { new Range(From, range.From) };
             }
 
-            return new Range[] { new Range(From, anotherRange.From), new Range(anotherRange.To, To) };
+            return new Range[] { new Range(From, range.From), new Range(range.To, To) };
         }
     }
 }

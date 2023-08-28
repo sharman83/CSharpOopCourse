@@ -4,8 +4,39 @@ namespace RangeTask
 {
     class Program
     {
+        public static void Print(Range[] range)
+        {
+            foreach (Range e in range)
+            {
+                if (range == null)
+                {
+                    Console.WriteLine("[]");
+                }
+
+                Console.Write("[" + e.ToString() + "]");
+            }
+        }
+
         static void Main(string[] args)
         {
+            // часть 1
+            Console.WriteLine("Часть 1");
+            Console.WriteLine("Введите начало числового диапазона:");
+            double from = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Введите конец числового диапазона:");
+            double to = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Введите число:");
+            double number = Convert.ToDouble(Console.ReadLine());
+
+            Range range = new Range(from, to);
+
+            Console.WriteLine($"Длина числового диапазона: {range.GetLength()}");
+            Console.WriteLine($"Число принадлежит данному диапазону (true/false): {range.IsInside(number)}" + Environment.NewLine);
+
+            // часть 2
+            Console.WriteLine("Часть 2");
             Console.WriteLine("Введите начало первого числового диапазона:");
             double from1 = Convert.ToDouble(Console.ReadLine());
 
@@ -21,40 +52,40 @@ namespace RangeTask
             Range range1 = new Range(from1, to1);
             Range range2 = new Range(from2, to2);
 
-            // ищем интервал-пересечения
-            Range intersectionRange = range1.GetIntersection(range2);
+            // ищем интервал пересечения
+            Range intersection = range1.GetIntersection(range2);
 
-            if (intersectionRange == null)
+            if (intersection == null)
             {
                 Console.WriteLine("Пересечения нет.");
             }
             else
             {
-                Console.WriteLine($"Интервал-пересечения: {intersectionRange.From} - {intersectionRange.To}");
+                Console.WriteLine("Интервал пересечения: " + intersection.ToString());
             }
 
-            // ищем интервал(ы)-объединения
-            Range[] unionRange = range1.GetUnion(range2);
+            // ищем интервал(ы) объединения
+            Range[] union = range1.GetUnion(range2);
 
-            foreach (Range range in unionRange)
-            {
-                Console.WriteLine($"Интервал-объединения: {range.From} - {range.To}");
-            }
+            Console.Write($"Интервал объединения: ");
+            Print(union);
+
+            Console.WriteLine();
 
             // ищем разность интервалов
-            Range[] differenceRange = range1.GetDifference(range2);
+            Range[] difference = range1.GetDifference(range2);
 
-            if (differenceRange.Length == 0)
+            Console.Write("Интервал разности: ");
+            if (difference.Length == 0)
             {
                 Console.WriteLine("Разности нет.");
             }
             else
             {
-                foreach (Range range in differenceRange)
-                {
-                    Console.WriteLine($"Интервал-разность: {range.From} - {range.To}");
-                }
+                Print(difference);
             }
+
+            Console.WriteLine();
         }
     }
 }
